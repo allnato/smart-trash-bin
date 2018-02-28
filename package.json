@@ -1,0 +1,9 @@
+{
+  "name": "smart-trash-bin",
+  "version": "1.0.0",
+  "description": "LBY-IOT Final Project",
+  "main": "main.js",
+  "repository": "https://github.com/Ollen/smart-trash-bin.git",
+  "author": "Allendale Nato",
+  "license": "MIT"
+}
