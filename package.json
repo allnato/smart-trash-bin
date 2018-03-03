@@ -5,5 +5,12 @@
   "main": "main.js",
   "repository": "https://github.com/Ollen/smart-trash-bin.git",
   "author": "Allendale Nato",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.2",
+    "hbs": "^4.0.1",
+    "serialport": "^6.1.1",
+    "string_decoder": "^1.0.3",
+    "xbee-api": "^0.6.0"
+  }
 }
