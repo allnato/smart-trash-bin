@@ -3,6 +3,7 @@ const xbee_api = require('xbee-api');
 const XBee = new xbee_api.XBeeAPI({
     api_mode: 1
 });
+
 const StringDecoder = require('string_decoder').StringDecoder;
 let decoder = new StringDecoder('utf8');
 let msg = "";
