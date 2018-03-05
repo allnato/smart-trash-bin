@@ -1,0 +1,25 @@
+{
+  "name": "Smart Trash Bin Server",
+  "main": "server.js",
+  "homepage": "https://github.com/Ollen/smart-trash-bin",
+  "authors": [
+    "Allendale Nato <natoallendale@gmail.com>"
+  ],
+  "description": "LBY-IOT Final Project",
+  "keywords": [
+    "IOT",
+    "Express",
+    "Arduino"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^4.0.0"
+  }
+}
