@@ -9,9 +9,8 @@
   "dependencies": {
     "express": "^4.16.2",
     "hbs": "^4.0.1",
+    "mqtt": "^2.16.0",
     "serialport": "^6.1.1",
-    "socket.io": "^2.0.4",
-    "string_decoder": "^1.0.3",
-    "xbee-api": "^0.6.0"
+    "socket.io": "^2.0.4"
   }
 }

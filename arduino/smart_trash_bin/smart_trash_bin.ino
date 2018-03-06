@@ -72,7 +72,8 @@ void sendJSONSensorData() {
   root["temperature"] = t;
   root["humidity"] = h;
   root["tiltPos"] = tiltPos;
-  root.prettyPrintTo(Serial);
+  root.printTo(Serial);
+  Serial.println();
 }
 
 /**
