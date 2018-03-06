@@ -7,21 +7,28 @@
 
 // Dependencies
 const express       = require('express');
+const socket        = require('./socket');
 const hbs           = require('hbs');
 
-// Router
+// Express Router
 const smart_trash   = require('./routes/smart_trash_bin');
-
 // Web App Port #
 const port = 3000;
 
+const app = express();
+const server = require('http').createServer(app);
+const io = socket.listen(server);
 
-let server = express();
-server.set('view engine', 'hbs');
+app.set('view engine', 'hbs');
 hbs.registerPartials(__dirname + '/views/partials');
 
-server.use('/scripts', express.static(__dirname + '/bower_components'));
-server.use('/SmartTrash', smart_trash);
+app.use((req,res,next) => {
+    res.io = io;
+    next();
+});
+app.use('/scripts', express.static(__dirname + '/bower_components'));
+app.use('/SmartTrash', smart_trash);
+
 server.listen(port, () => {
     console.log(`Server started on port ${port}`);
 });

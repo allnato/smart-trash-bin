@@ -2,7 +2,7 @@ const SerialPort = require('serialport');
 const Readline = SerialPort.parsers.Readline;
 
 // Initialize Serial Port
-const port = new SerialPort('COM8', {
+const port = new SerialPort('COM6', {
     autoOpen: false,
     baudRate: 9600
 });
