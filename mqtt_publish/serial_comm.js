@@ -13,7 +13,7 @@ const parser = port.pipe(new Readline());
 // Open Serial Port
 port.open(err => {
     if (err) {
-        console.log(`Error opening serial port ${portName}: `, err.message);
+        console.log(`Error opening serial port ${portName}`);
         process.exit();
     }
 });
