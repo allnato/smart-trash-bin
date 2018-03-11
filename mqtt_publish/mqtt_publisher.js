@@ -27,8 +27,6 @@ const connect = (broker='mqtt://localhost') => {
     client.on('end', () => {
         console.log('Closing MQTT client');
     });
-
-    return client;
 };
 
 /**
@@ -47,13 +45,10 @@ const publishMessage = (topic, msg) => {
             console.log('Error publishing message');
             return;
         }
-        console.log('Message published');
     });
 };
 
-
-publishMessage('smart-trash', 'Hello');
-connect('mqtt://192.168.1.3');
-
 module.exports = {
+	connect,
+	publishMessage
 };
