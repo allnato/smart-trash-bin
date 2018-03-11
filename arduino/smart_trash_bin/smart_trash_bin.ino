@@ -9,7 +9,8 @@
 
 
 // Timer Object
-SimpleTimer timer;
+SimpleTimer sensorTimer;
+SimpleTimer rfidTimer;
 
 // PINS
 #define TRIG_PIN  2
@@ -27,7 +28,7 @@ SimpleTimer timer;
 
 // Initialize Sensors
 NewPing sonar(TRIG_PIN, ECHO_PIN, DIST_MAX);
-MFRC522 rfid(SS_PIN, RST_PIN);
+MFRC522 rfid(SDA_PIN, RST_PIN);
 MFRC522::MIFARE_Key key;
 DHT dht(DHT_PIN, DHT_TYPE);
 
@@ -48,11 +49,13 @@ void setup() {
   dht.begin();
   SPI.begin();
   rfid.PCD_Init();
-  timer.setInterval(2000, sendJSONSensorData);
+  sensorTimer.setInterval(2000, sendJSONSensorData);
+  rfidTimer.setInterval(1000, sendJSONRfidData);
 }
 
 void loop() {
-  timer.run();
+  sensorTimer.run();
+  rfidTimer.run();
 }
 
 /**
@@ -81,10 +84,15 @@ void sendJSONSensorData() {
  */
 void sendJSONRfidData() {
   // Convert to JSON
-  StaticJsonBuffer<200> jsonBuffer;
-  JsonObject& root = jsonBuffer.createObject();
-  root["trashID"] = TRASH_ID;
-  root.prettyPrintTo(Serial);
+
+  if (readCard()) {
+    StaticJsonBuffer<200> jsonBuffer;
+    JsonObject& root = jsonBuffer.createObject();
+    root["trashID"] = TRASH_ID;
+    root["employee_id"] = printHex(nuidPICC, rfid.uid.size);;
+    root.printTo(Serial);
+    Serial.println();   
+  }
 }
 
 /**
@@ -140,10 +148,12 @@ bool readCard() {
 /**
    Helper routine to dump a byte array as hex values to Serial.
 */
-void printHex(byte *buffer, byte bufferSize) {
+String printHex(byte *buffer, byte bufferSize) {
+  String hex = "";
   for (byte i = 0; i < bufferSize; i++) {
-    Serial.print(buffer[i] < 0x10 ? " 0" : " ");
-    Serial.print(buffer[i], HEX);
+    hex += buffer[i] < 0x10 ? " 0" : " ";
+    hex += String(buffer[i], HEX);
   }
+  return hex;
 }
 
