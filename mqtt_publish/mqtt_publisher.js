@@ -1,4 +1,5 @@
-var mqtt = require('mqtt');
+const moment = require('moment');
+const mqtt = require('mqtt');
 let client;
 
 /**
@@ -6,26 +7,36 @@ let client;
  * @param {String} broker broker url with protocol (ex. mqtt://192.168.1.1)
  */
 const connect = (broker='mqtt://localhost') => {
-    client = mqtt.connect(broker, {
-        connectTimeout: 5000
-    });
-    
-    // Handle Connection Error
-    client.on('error', err => {
-        console.log(`Error in ${broker}: ${err}`);
-    });
-    
-    client.on('connect', con => {
-        console.log(`Connected to MQTT broker: ${broker}`);
-    });
+    return new Promise((resolve, reject) => {
+        try {
+            client = mqtt.connect(broker, {
+                connectTimeout: 5000
+            });
+            
+            // Error Event
+            client.on('error', err => {
+                console.log(`[${moment().format('HH:mm:ss')}] Error in ${broker}: ${err}`);
+            });
 
-    client.on('offline', () => {
-        console.log(`MQTT client is now offline: Cannot connect to broker: ${broker}`);
-        client.end();
-    });
+            // Offline Event
+            client.on('offline', () => {
+                client.end();
+                reject(new Error(`MQTT client is now offline: ${broker}`));
+            });
 
-    client.on('end', () => {
-        console.log('Closing MQTT client');
+            // End Event
+            client.on('end', () => {
+                console.log(`[${moment().format('HH:mm:ss')}] Closing MQTT client`);
+            });
+
+            // Connected Event
+            client.on('connect', con => {
+                console.log(`[${moment().format('HH:mm:ss')}] Connected to MQTT broker: ${broker}`);
+                resolve(client);
+            });
+        } catch (err) {
+            reject(err);
+        }
     });
 };
 
