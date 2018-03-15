@@ -1,16 +1,24 @@
 const socketio = require('socket.io');
 
-module.exports.listen = server => {
-    var io = socketio.listen(server, {
-        serveClient: false
-    });
+let io;
+let realTimeRoute;
 
-    io.of('/real-time-data').on('connection', socket => {
+exports.listen = server => {
+    io = socketio.listen(server);
+
+    realTimeRoute = io.of('/real-time-data');
+
+    realTimeRoute.on('connection', socket => {
         console.log('socketio: ', 'a user connected');
+
+        // On Disconnect
         socket.on('disconnect', () => {
             console.log('socketio: ', 'a user disconnected');
         })
     });
 
+
     return io;
 };
+
+exports.realTimeRoute = realTimeRoute;
