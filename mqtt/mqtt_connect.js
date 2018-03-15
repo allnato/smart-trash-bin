@@ -1,6 +1,5 @@
 const moment = require('moment');
 const mqtt = require('mqtt');
-let client;
 
 /**
  * Connect to a MQTT Broker
@@ -9,7 +8,7 @@ let client;
 const connectMQTT = (broker='mqtt://localhost') => {
     return new Promise((resolve, reject) => {
         try {
-            client = mqtt.connect(broker, {
+            let client = mqtt.connect(broker, {
                 connectTimeout: 5000
             });
             

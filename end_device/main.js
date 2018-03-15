@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 const Serial = require('./serial_port');
-const MQTTpub = require('./mqtt_publisher');
+const MQTTpub = require('./../mqtt/mqtt_connect');
 
 let port;
 let mqttClient;
@@ -25,4 +25,4 @@ async function publishSerialData(serialport, brokerAddr, topic) {
     }
 };
 
-publishSerialData('COM8', 'mqtt://10.200.180.8', 'smart-trash');
+publishSerialData('COM8', 'mqtt://192.168.1.3', 'smart-trash');
