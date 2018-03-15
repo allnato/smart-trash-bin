@@ -22,10 +22,6 @@ const io = socket.listen(server);
 app.set('view engine', 'hbs');
 hbs.registerPartials(__dirname + '/views/partials');
 
-app.use((req,res,next) => {
-    res.io = io;
-    next();
-});
 app.use('/scripts', express.static(__dirname + '/bower_components'));
 app.use('/SmartTrash', smart_trash);
 

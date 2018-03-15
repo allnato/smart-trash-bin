@@ -12,7 +12,7 @@ async function publishSerialData(serialport, brokerAddr, topic) {
         port = await Serial.connectPort(serialport);
 
         // Establish Connection to MQTT Broker
-        mqttClient = await MQTTpub.connect(brokerAddr);
+        mqttClient = await MQTTpub.connectMQTT(brokerAddr);
         
         port.on('readable', () => {
             let msg = port.read().toString();
