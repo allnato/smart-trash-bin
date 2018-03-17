@@ -12,7 +12,26 @@
 <body>
     <div class="container">
         <h2>Smart Trash Bin <span class="badge badge-warning">Real-Time</span></h2>
-        <p class="my-data"></p>
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <th>Waste Height</th>
+                    <td class="wasteHeight">N/A</td>
+                </tr>
+                <tr>
+                    <th>Temperature</th>
+                    <td class="temperature">N/A</td>
+                </tr>
+                <tr>
+                    <th>Humidity</th>
+                    <td class="humidity">N/A</td>
+                </tr>
+                <tr>
+                    <th>Tilt</th>
+                    <td class="tiltPos">N/A</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     {{!-- JS Files --}}
     {{> socket_client}}

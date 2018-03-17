@@ -2,6 +2,9 @@
 <script>
     var socket = io('/real-time-data');
     socket.on('real-time-data', data => {
-        $('.my-data').text(JSON.stringify(data));
+        $('.wasteHeight').text(Number(data.wastePercent).toFixed(2) + ' %');
+        $('.temperature').text(Number(data.temperature).toFixed(2) + ' *C');
+        $('.humidity').text(Number(data.humidity).toFixed(2) + ' %');
+        $('.tiltPos').text(Number(data.tiltPos));
     });
 </script>
