@@ -22,9 +22,10 @@ SimpleTimer rfidTimer;
 #define SDA_PIN   10
 
 // CONST VAR 
-#define TRASH_ID  01
-#define DIST_MAX  35
-#define DHT_TYPE  DHT11
+#define TRASH_ID      1
+#define TRASH_HEIGHT  30 //Centimeters
+#define DIST_MAX      35
+#define DHT_TYPE      DHT11
 
 // Initialize Sensors
 NewPing sonar(TRIG_PIN, ECHO_PIN, DIST_MAX);
@@ -70,8 +71,16 @@ void sendJSONSensorData() {
   // Convert to JSON
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
+  root["dataType"] = "sensor";
   root["trashID"] = TRASH_ID;
+  root["trashHeight"] = TRASH_HEIGHT;
   root["sonarDistance"] = sonarDistance;
+  // Calculate Waste Percentage
+  if (sonarDistance > 30) {
+    sonarDistance = 30;
+  }
+  root["wastePercent"] = (1 - (sonarDistance / TRASH_HEIGHT)) * 100;
+  
   root["temperature"] = t;
   root["humidity"] = h;
   root["tiltPos"] = tiltPos;
@@ -88,6 +97,7 @@ void sendJSONRfidData() {
   if (readCard()) {
     StaticJsonBuffer<200> jsonBuffer;
     JsonObject& root = jsonBuffer.createObject();
+    root["dataType"] = "activity";
     root["trashID"] = TRASH_ID;
     root["employee_id"] = printHex(nuidPICC, rfid.uid.size);;
     root.printTo(Serial);

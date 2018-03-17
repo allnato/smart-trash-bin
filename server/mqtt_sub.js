@@ -13,6 +13,7 @@ async function broadcastMQTTData(brokerAddr, topic, socket) {
         mqttClient.subscribe(topic);
         mqttClient.on('message', (topic, msg) => {
             console.log(msg.toString());
+            socket.emit('real-time-data', msg.toString());
         });
         
     } catch (err) {
@@ -20,6 +21,5 @@ async function broadcastMQTTData(brokerAddr, topic, socket) {
     }
 };
 
-broadcastMQTTData('mqtt://192.168.1.3', 'smart-trash', 'buffer');
 
-module.exports = broadcastMQTTData;
+module.exports = {broadcastMQTTData};

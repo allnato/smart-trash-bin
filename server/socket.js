@@ -17,8 +17,7 @@ exports.listen = server => {
         })
     });
 
-
-    return io;
+    return realTimeRoute;
 };
 
 exports.realTimeRoute = realTimeRoute;

@@ -1,7 +1,7 @@
 <script src="/scripts/socket.io-client/dist/socket.io.js"></script>
 <script>
     var socket = io('/real-time-data');
-    socket.on('data', data => {
+    socket.on('real-time-data', data => {
         $('.my-data').text(data);
     });
 </script>
