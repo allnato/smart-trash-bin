@@ -1,7 +1,5 @@
 const socketio = require('socket.io');
-
-let io;
-let realTimeRoute;
+const moment = require('moment');
 
 exports.listen = server => {
     io = socketio.listen(server);
@@ -20,4 +18,19 @@ exports.listen = server => {
     return realTimeRoute;
 };
 
-exports.realTimeRoute = realTimeRoute;
+exports.broadcastData = (socket, msg) => {
+    // Check if message is a valid JSON data
+    try {
+        let jsonData = JSON.parse(msg);
+        socket.clients((err, clients) => {
+            if (clients.length > 0 && jsonData.dataType == 'sensor') {
+                socket.emit('real-time-data', jsonData);
+            }
+        });
+        // Perform DB Ops here
+        
+    // Log JSON parse error
+    } catch (err) {
+        console.log(`[${moment().format('HH:mm:ss')}] Error parsing recieved MQTT data: ${err.message}`);
+    }
+};

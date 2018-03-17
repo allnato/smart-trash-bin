@@ -2,6 +2,6 @@
 <script>
     var socket = io('/real-time-data');
     socket.on('real-time-data', data => {
-        $('.my-data').text(data);
+        $('.my-data').text(JSON.stringify(data));
     });
 </script>
