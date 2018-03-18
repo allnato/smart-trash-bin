@@ -24,6 +24,8 @@ app.set('view engine', 'hbs');
 hbs.registerPartials(__dirname + '/views/partials');
 
 app.use('/scripts', express.static(__dirname + '/bower_components'));
+app.use('/js', express.static(__dirname + '/views/js'));
+
 app.use('/SmartTrash', smart_trash);
 
 server.listen(port, () => {

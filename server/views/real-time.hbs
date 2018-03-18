@@ -32,10 +32,27 @@
                 </tr>
             </tbody>
         </table>
+        
+        <div class="row">
+            <div class="col-sm-4 offset-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        Waste Height
+                    </div>
+                    <div class="card-body">
+                        <canvas id="myChart" width="400" height="400"></canvas>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Last updated 3 mins ago
+                    </div>      
+                </div>
+            </div>
+        </div>
     </div>
     {{!-- JS Files --}}
     {{> socket_client}}
     {{> base_js}}
+    {{> chart_js}}
 </body>
 
 </html>
