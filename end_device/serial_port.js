@@ -11,7 +11,7 @@ const connectPort = portName => {
     return new Promise ((resolve, reject) => {
         let port = new SerialPort(portName, {
             autoOpen: false,
-            baudRate: 9600
+            baudRate: 115200
         });
 
         port.open(err => {
