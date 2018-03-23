@@ -48,8 +48,8 @@ bool readCard();
 void printHex();
 
 void setup() {
-  Serial.begin(115200);
-  XBee.begin(115200);
+  Serial.begin(9600);
+  XBee.begin(9600);
   pinMode(TILT_S1, INPUT);
   pinMode(TILT_S2, INPUT);
   dht.begin();
@@ -89,8 +89,8 @@ void sendJSONSensorData() {
   root["temperature"] = t;
   root["humidity"] = h;
   root["tiltPos"] = tiltPos;
-  root.printTo(Serial);
-  Serial.println();
+  root.printTo(XBee);
+  XBee.println();
 }
 
 /**
