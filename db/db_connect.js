@@ -20,4 +20,15 @@ function mysqlConnect() {
     });
 }
 
+function getAllBinData() {
+    conn.query('SELECT * FROM `bin`', (err,res,field) => {
+        if (err) {
+            console.log(err.message);
+            return;
+        }
+        console.log(res[0]);
+    });
+}
+
 mysqlConnect();
+getAllBinData();
