@@ -24,5 +24,4 @@ async function manageMQTTData(brokerAddr, topic, socket) {
 };
 
 
-
 module.exports = {manageMQTTData};

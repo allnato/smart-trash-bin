@@ -32,5 +32,6 @@ exports.broadcastData = (socket, msg) => {
     // Log JSON parse error
     } catch (err) {
         console.log(`[${moment().format('HH:mm:ss')}] Error parsing recieved MQTT data: ${err.message}`);
+        console.log(toString(msg));
     }
 };

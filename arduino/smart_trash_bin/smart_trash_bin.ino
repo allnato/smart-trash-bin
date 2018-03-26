@@ -7,6 +7,7 @@
 #include <DHT.h>
 #include <SPI.h>
 
+#include "SoftwareSerial.h"
 
 // Timer Object
 SimpleTimer sensorTimer;
@@ -33,6 +34,9 @@ MFRC522 rfid(SDA_PIN, RST_PIN);
 MFRC522::MIFARE_Key key;
 DHT dht(DHT_PIN, DHT_TYPE);
 
+// XBee Serial
+SoftwareSerial XBee(8,7);
+
 // Array that will store NUID of RFID
 byte nuidPICC[4];
 
@@ -45,13 +49,14 @@ void printHex();
 
 void setup() {
   Serial.begin(9600);
+  XBee.begin(9600);
   pinMode(TILT_S1, INPUT);
   pinMode(TILT_S2, INPUT);
   dht.begin();
   SPI.begin();
   rfid.PCD_Init();
-  sensorTimer.setInterval(2000, sendJSONSensorData);
-  rfidTimer.setInterval(1000, sendJSONRfidData);
+  sensorTimer.setInterval(5000, sendJSONSensorData);
+  rfidTimer.setInterval(2000, sendJSONRfidData);
 }
 
 void loop() {
@@ -84,8 +89,8 @@ void sendJSONSensorData() {
   root["temperature"] = t;
   root["humidity"] = h;
   root["tiltPos"] = tiltPos;
-  root.printTo(Serial);
-  Serial.println();
+  root.printTo(XBee);
+  XBee.println();
 }
 
 /**
