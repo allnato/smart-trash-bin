@@ -1,12 +1,10 @@
-var ctx = document.getElementById("myChart");
-
-var wasteChart = new Chart($('#wasteChart') ,{
+let wasteChart = new Chart($('#wasteChart') ,{
     type: 'bar',
     data: {
         labels: ['Waste Fill'],
         datasets:[{
             label: 'Waste height %',
-            data: [57.23],
+            data: [0],
             backgroundColor: ['rgba(75, 192, 110, .5)'],
             borderColor: ['rgba(75, 192, 110, 1)'],
             borderWidth: 2
@@ -27,7 +25,7 @@ var wasteChart = new Chart($('#wasteChart') ,{
     }
 });
 
-var humidChart = new Chart($('#humidChart'), {
+let humidChart = new Chart($('#humidChart'), {
     type: 'doughnut',
     data: {
         datasets: [{
@@ -40,7 +38,6 @@ var humidChart = new Chart($('#humidChart'), {
     },
     options: {
         rotation: 1 * Math.PI,
-        circumference: 1 * Math.PI,
-        maintainAspectRatio: false
+        circumference: 1 * Math.PI
     }
 });

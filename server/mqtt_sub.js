@@ -15,6 +15,7 @@ async function manageMQTTData(brokerAddr, topic, socket) {
         mqttClient.subscribe(topic);
         // Execute the following code upon recieving a msg.
         mqttClient.on('message', (topic, msg) => {
+            console.log(msg.toString());
             broadcastData(socket, msg);
         });
     // Log MQTT connection error.

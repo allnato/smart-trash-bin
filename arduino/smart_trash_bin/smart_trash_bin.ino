@@ -55,7 +55,7 @@ void setup() {
   dht.begin();
   SPI.begin();
   rfid.PCD_Init();
-  sensorTimer.setInterval(5000, sendJSONSensorData);
+  sensorTimer.setInterval(2000, sendJSONSensorData);
   rfidTimer.setInterval(2000, sendJSONRfidData);
 }
 
@@ -89,6 +89,8 @@ void sendJSONSensorData() {
   root["temperature"] = t;
   root["humidity"] = h;
   root["tiltPos"] = tiltPos;
+//  root.printTo(Serial);
+//  Serial.println();
   root.printTo(XBee);
   XBee.println();
 }

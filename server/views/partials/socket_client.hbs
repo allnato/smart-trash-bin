@@ -4,8 +4,10 @@
     socket.on('real-time-data', data => {
         wasteChart.data.datasets[0].data = [data.wastePercent];
         wasteChart.update();
-        $('.wastePercentText').text(data.wastePercent);
+        $('.wastePercentText').text(data.wastePercent.toFixed(2) + "%");
         humidChart.data.datasets[0].data = [data.humidity, (100 - data.humidity)];
         humidChart.update();
+        $('.humidPercentText').text(data.humidity.toFixed(2) + "%");
+        
     });
 </script>
