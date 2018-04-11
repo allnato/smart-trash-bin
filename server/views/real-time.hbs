@@ -40,9 +40,19 @@
                                 </div>
                             </div>
                         </li>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <strong>Lid Status</strong>
+                                </div>
+                                <div>
+                                    <strong class="tiltPos badge badge-danger">Closed</strong>
+                                </div>
+                            </div>
+                        </li>
                     </div>
                     <div class="card-footer text-muted">
-                        Last updated 3 mins ago
+                        Updates every 2 seconds.
                     </div>      
                 </div>
             </div>
@@ -50,8 +60,9 @@
     </div>
     {{!-- JS Files --}}
     {{> base_js}}
-    {{> chart_js}}
     {{> socket_client}}
+
+    <script src="/dashboard/js/real-time.js"></script>
 </body>
 
 </html>

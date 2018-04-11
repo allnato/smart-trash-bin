@@ -2,13 +2,25 @@
 <script>
     var socket = io('/real-time-data');
     socket.on('real-time-data', data => {
-        wasteChart.data.datasets[0].data = [data.wastePercent];
-        wasteChart.update();
-        $('.wastePercentText').text(data.wastePercent.toFixed(2) + "%");
-        humidChart.data.datasets[0].data = [data.humidity, (100 - data.humidity)];
-        humidChart.update();
-        $('.humidPercentText').text(data.humidity.toFixed(2) + "%");
-        $('.temperature').text(data.temperature.toFixed(2) + "C");
+        if (data.dataType == "sensor") {
+            $('.wastePercentText').text(data.wastePercent.toFixed(2) + "%");
+            wasteChart.data.datasets[0].data = [data.wastePercent];
+            wasteChart.update();
+
+            $('.humidPercentText').text(data.humidity.toFixed(2) + "%");
+            humidChart.data.datasets[0].data = [data.humidity, (100 - data.humidity)];
+            humidChart.update();
+            
+            $('.temperature').text(data.temperature.toFixed(2) + "C");
+
+            if (data.tiltPos == 1) {
+                $('.tiltPos').text("Closed");
+                $('.tiltPos').attr('class', 'tiltPos badge badge-danger');    
+            } else  if (data.tiltPos == 2){
+                $('.tiltPos').text("Open");
+                $('.tiltPos').attr('class', 'tiltPos badge badge-success');                
+            }
+        }
         
     });
 </script>

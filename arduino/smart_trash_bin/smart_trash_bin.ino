@@ -107,8 +107,8 @@ void sendJSONRfidData() {
     root["dataType"] = "activity";
     root["trashID"] = TRASH_ID;
     root["employee_id"] = printHex(nuidPICC, rfid.uid.size);;
-    root.printTo(Serial);
-    Serial.println();   
+    root.printTo(XBee);
+    XBee.println();   
   }
 }
 
