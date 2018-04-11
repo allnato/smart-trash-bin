@@ -8,6 +8,7 @@
         humidChart.data.datasets[0].data = [data.humidity, (100 - data.humidity)];
         humidChart.update();
         $('.humidPercentText').text(data.humidity.toFixed(2) + "%");
+        $('.temperature').text(data.temperature.toFixed(2) + "C");
         
     });
 </script>

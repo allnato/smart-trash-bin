@@ -30,14 +30,12 @@ let humidChart = new Chart($('#humidChart'), {
     data: {
         datasets: [{
             label: 'Humidity %',
-            data: [56, 44],
+            data: [0, 100],
             backgroundColor:['rgba(54, 162, 235, 0.2)'],
             borderColor:['rgba(54, 162, 235)', 'rgba(54, 162, 235)']
         }],
         labels: ['Humidity']
     },
     options: {
-        rotation: 1 * Math.PI,
-        circumference: 1 * Math.PI
     }
 });
