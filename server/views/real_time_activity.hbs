@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{!-- CSS Files --}}
+    {{> base_css}}
+    <link rel="stylesheet" href="/scripts/bootstrap-table/dist/bootstrap-table.min.css">
+    <title>STB — Real-Time Data</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="sidebar" data-color="blue">
+            <div class="sidebar-wrapper">
+                <div class="logo">
+                    <a href="#" class="simple-text">
+                        Bintot
+                    </a>
+                </div>
+                <ul class="nav">
+                    {{!-- Trash --}}
+                    <li class="nav-link mb-0">
+                        <p class="lead text-center mb-0">Trash Bins</p>
+                    </li>
+
+                    <li>
+                        <a class="nav-link" href="/SmartTrash/bin-list">
+                            <i class="far fa-trash-alt"></i>
+                            <p>Bin List</p>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="nav-link" href="/SmartTrash/real-time-sensor">
+                            <i class="far fa-clock"></i>
+                            <p>Real-Time Data</p>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="nav-link" href="realtime_data.html">
+                            <i class="far fa-hourglass"></i>
+                            <p>Weekly Data</p>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="nav-link" href="realtime_data.html">
+                            <i class="far fa-calendar-alt"></i>
+                            <p>Monthly Data</p>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="nav-link" href="realtime_data.html">
+                            <i class="far fa-calendar"></i>
+                            <p>Yearly Data</p>
+                        </a>
+                    </li>
+
+                    {{!-- Employee --}}
+                    <li class="nav-link mb-0">
+                        <p class="lead text-center mb-0">Employee</p>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="employee_data.html">
+                            <i class="far fa-id-card"></i>
+                            <p>Employee List</p>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="employee_data.html">
+                            <i class="far fa-clock"></i>
+                            <p>Real-Time Activity</p>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="main-panel">
+            <nav class="navbar navbar-expand-lg">
+                <div class=" container-fluid  ">
+                    <a class="navbar-brand" href="#pablo">Employee Activity [Real-Time]</a>
+                    <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-bar burger-lines"></span>
+                        <span class="navbar-toggler-bar burger-lines"></span>
+                        <span class="navbar-toggler-bar burger-lines"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                        <ul class="nav navbar-nav mr-auto">
+                            
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="content">
+                <div class="container">
+                    <div class="jumbotron text-center bg-primary">
+                        <h2 class="text-center text-white display-5 mb-0">
+                            <i class="far fa-id-badge"></i> <strong>Employee Activity Tracker</strong>
+                            <br>
+                            <span class="badge badge-warning mt-3">Real Time</span>
+                        </h2>
+                    </div>
+
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table id="emp-table" class="table">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Employee ID</th>
+                                        <th>Employee Name</th>
+                                        <th>Bin ID</th>
+                                        <th>Time Activity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>11443529</td>
+                                        <td>Allendale</td>
+                                        <td>012</td>
+                                        <td>11:32:42</td>
+                                    </tr>
+                                    <tr>
+                                        <td>11243582</td>
+                                        <td>Othello</td>
+                                        <td>014</td>
+                                        <td>02:45:12</td>
+                                    </tr>
+                                    <tr>
+                                        <td>11568244</td>
+                                        <td>Hamlet</td>
+                                        <td>063</td>
+                                        <td>16:21:44</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+    {{!-- JS Files --}}
+    {{> base_js}}
+    {{> socket_client}}
+    <script src="/scripts/bootstrap-table/dist/bootstrap-table.min.js"></script>
+    <script>
+        let $table = $('#emp-table');
+        $table.bootstrapTable({
+            classes: "table",
+            columns: [{
+                field: "emp_id",
+                name: "Employee ID",
+                sortable: true
+            }, {
+                field: "emp_name",
+                name: "Employee Name",
+                sortable: true                
+            }, {
+                field: "bin_id",
+                name: "Bin ID",
+                sortable: true                
+            }, {
+                field: "time",
+                name: "Activity Time",
+                sortable: true                
+            }],
+            search: true,
+            pagination: true
+        });
+
+    </script>
+
+</html>

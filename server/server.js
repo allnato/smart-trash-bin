@@ -12,7 +12,8 @@ const hbs           = require('hbs');
 // MQTT Live-Data
 const mqtt          = require('./mqtt_sub');
 // Express Router
-const smart_trash   = require('./routes/smart_trash_bin');
+const bin_route     = require('./routes/bin_route');
+const emp_route     = require('./routes/employee_route');
 // Web App Port #
 const port = 3000;
 
@@ -26,7 +27,12 @@ hbs.registerPartials(__dirname + '/views/partials');
 app.use('/scripts', express.static(__dirname + '/bower_components'));
 app.use('/dashboard', express.static(__dirname + '/views'));
 
-app.use('/SmartTrash', smart_trash);
+app.use('/smart-trash/bin', bin_route);
+app.use('/smart-trash/emp', emp_route);
+
+app.get('/smart-trash', (req, res) => {
+    res.send('home_dash.hbs');
+});
 
 server.listen(port, () => {
     console.log(`Server started on port ${port}`);
