@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{!-- CSS Files --}}
+    {{> base_css}}
+    <link rel="stylesheet" href="/scripts/bootstrap-table/dist/bootstrap-table.min.css">
+    <title>STB — Real-Time Data</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="jumbotron mt-3">
+            <h2>
+                <span class="badge badge-warning">Real-Time</span>
+                <small class="text-muted"><i class="far fa-id-badge"></i> Employee Activity Tracker</small>
+            </h2>
+        </div>
+
+        <div class="row">
+            <div class="table-responsive">
+                <table id="emp-table" class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Employee Name</th>
+                            <th>Bin ID</th>
+                            <th>Time Activity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>11443529</td>
+                            <td>Allendale</td>
+                            <td>012</td>
+                            <td>11:32:42</td>
+                        </tr>
+                        <tr>
+                            <td>11243582</td>
+                            <td>Othello</td>
+                            <td>014</td>
+                            <td>02:45:12</td>
+                        </tr>
+                        <tr>
+                            <td>11568244</td>
+                            <td>Hamlet</td>
+                            <td>063</td>
+                            <td>16:21:44</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {{!-- JS Files --}}
+    {{> base_js}}
+    {{> socket_client}}
+    <script src="/scripts/bootstrap-table/dist/bootstrap-table.min.js"></script>
+    <script>
+        let $table = $('#emp-table');
+        $table.bootstrapTable({
+            classes: "table",
+            columns: [{
+                field: "emp_id",
+                name: "Employee ID",
+                sortable: true
+            }, {
+                field: "emp_name",
+                name: "Employee Name",
+                sortable: true                
+            }, {
+                field: "bin_id",
+                name: "Bin ID",
+                sortable: true                
+            }, {
+                field: "time",
+                name: "Activity Time",
+                sortable: true                
+            }],
+            search: true,
+            pagination: true
+        });
+
+    </script>
+</body>
+
+</html>

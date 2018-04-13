@@ -29,7 +29,7 @@ SimpleTimer rfidTimer;
 #define DHT_TYPE      DHT11
 
 // Initialize Sensors
-NewPing sonar(TRIG_PIN, ECHO_PIN, DIST_MAX);
+NewPing sonar(TRIG_PIN, ECHO_PIN);
 MFRC522 rfid(SDA_PIN, RST_PIN);
 MFRC522::MIFARE_Key key;
 DHT dht(DHT_PIN, DHT_TYPE);
@@ -89,8 +89,8 @@ void sendJSONSensorData() {
   root["temperature"] = t;
   root["humidity"] = h;
   root["tiltPos"] = tiltPos;
-//  root.printTo(Serial);
-//  Serial.println();
+  root.printTo(Serial);
+  Serial.println();
   root.printTo(XBee);
   XBee.println();
 }
