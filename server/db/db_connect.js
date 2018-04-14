@@ -1,3 +1,4 @@
+const moment = require('moment');
 const mysql = require('mysql');
 
 // Create MYSQL connection instance.
@@ -13,10 +14,10 @@ let conn = mysql.createConnection({
 function mysqlConnect() {
     conn.connect(err => {
         if (err) {
-            console.log(`Error connecting to DB: ${err.message}` );
+            console.log(`[${moment().format('HH:mm:ss')}] Cannot connect to MySQL Database: ${err.message}`);                
             process.exit();
         }
-        console.log(`Connected to DB: ${conn.config.database}`);
+        console.log(`[${moment().format('HH:mm:ss')}] Connected to MySQL Database: ${conn.config.database}`);        
     });
 }
 

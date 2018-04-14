@@ -2,6 +2,8 @@ const moment = require('moment');
 const mqtt = require('./../mqtt/mqtt_connect');
 const broadcastData = require('./socket').broadcastData;
 
+const insert = require('./db/insert_data');
+
 /**
  * Connect to a MQTT Broker and Broadcast the data recieved to the client socket.
  * @param {string} broker broker url with protocol (ex. mqtt://192.168.1.1)
@@ -16,7 +18,19 @@ async function manageMQTTData(brokerAddr, topic, socket) {
         // Execute the following code upon recieving a msg.
         mqttClient.on('message', (topic, msg) => {
             console.log(msg.toString());
-            broadcastData(socket, msg);
+            try {
+                let jsonData = JSON.parse(msg);
+                broadcastData(socket, msg);
+                // Store data in db
+                if (jsonData.dataType == 'sensor') {
+                    insert.sensorData(jsonData);
+                } else if (jsonData.dataType == 'activity'){
+                    insert.empActivity(jsonData)
+                }
+            } catch (err) {
+                console.log(`[${moment().format('HH:mm:ss')}] Error parsing recieved MQTT data: ${err.message}`);
+            }
+
         });
     // Log MQTT connection error.
     } catch (err) {

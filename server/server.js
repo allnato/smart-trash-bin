@@ -9,6 +9,8 @@
 const express       = require('express');
 const socket        = require('./socket');
 const hbs           = require('hbs');
+// DB Connection
+require('./db/db_connect');
 // MQTT Live-Data
 const mqtt          = require('./mqtt_sub');
 // Express Router
