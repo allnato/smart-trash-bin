@@ -25,6 +25,9 @@ const realTimeSocket = socket.listen(server);
 
 app.set('view engine', 'hbs');
 hbs.registerPartials(__dirname + '/views/partials');
+hbs.registerHelper('json', context => {
+    return JSON.stringify(context);
+});
 
 app.use('/scripts', express.static(__dirname + '/bower_components'));
 app.use('/dashboard', express.static(__dirname + '/views'));
@@ -38,6 +41,6 @@ app.get('/smart-trash', (req, res) => {
 
 server.listen(port, () => {
     console.log(`Server started on port ${port}`);
-    mqtt.manageMQTTData('mqtt://192.168.1.7', 'smart-trash', realTimeSocket);
+    mqtt.manageMQTTData('mqtt://192.168.1.3', 'smart-trash', realTimeSocket);
     
 });

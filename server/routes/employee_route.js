@@ -1,6 +1,8 @@
 const express   = require('express');
 const router     = express.Router();
 
+const q_all     = require('./../db/all_query');
+
 // Real-time Employee Activity
 router.get('/real-time', (req, res) => {
     res.render('real_time_activity.hbs', {
@@ -10,10 +12,18 @@ router.get('/real-time', (req, res) => {
 });
 
 router.get('/list', (req, res) => {
-    res.render('emp_list.hbs', {
-        title: "Employee List",
-        uri: "/emp/list"
-    });
+    q_all.getAllEmployeeData()
+        .then(data => {
+            res.render('emp_list.hbs', {
+                title: "Employee List",
+                uri: "/emp/list",
+                list: data
+            });
+        })
+        .catch(err => {
+            res.status(500);
+            res.send('Internal Server Error');
+        });
 });
 
 router.get('/weekly', (req, res) => {

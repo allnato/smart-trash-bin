@@ -19,7 +19,7 @@ SELECT * FROM sensor_data sa;
 
 -- All employee information: name and occupation
 -- -------------------------------------
-  SELECT employee_id, first_name, last_name, occupation
+  SELECT employee_id, first_name, last_name
     FROM employee
 ORDER BY employee.last_name;
 

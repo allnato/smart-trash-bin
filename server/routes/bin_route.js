@@ -1,11 +1,21 @@
 const express   = require('express');
 const router    = express.Router();
 
+const q_all     = require('./../db/all_query');
+
 router.get('/list', (req, res) => {
-    res.render('bin_list.hbs', {
-        title: "Smart Bin List",
-        uri: "/bin/list"
-    });
+    q_all.getAllBinData()
+        .then(data => {
+            res.render('bin_list.hbs', {
+                title: "Smart Bin List",
+                uri: "/bin/list",
+                list: data
+            });
+        })
+        .catch(err => {
+            res.status(500);
+            res.send('Internal Server Error');
+        });
 });
 
 // Real-time sensor data

@@ -26,30 +26,11 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th>Employee ID</th>
-                                        <th>Employee Name</th>
-                                        <th>Bin ID</th>
-                                        <th>Time Activity</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>11443529</td>
-                                        <td>Allendale</td>
-                                        <td>012</td>
-                                        <td>11:32:42</td>
-                                    </tr>
-                                    <tr>
-                                        <td>11243582</td>
-                                        <td>Othello</td>
-                                        <td>014</td>
-                                        <td>02:45:12</td>
-                                    </tr>
-                                    <tr>
-                                        <td>11568244</td>
-                                        <td>Hamlet</td>
-                                        <td>063</td>
-                                        <td>16:21:44</td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -63,28 +44,28 @@
     {{> base_js}}
     <script src="/scripts/bootstrap-table/dist/bootstrap-table.min.js"></script>
     <script>
-        let $table = $('#emp-table');
-        $table.bootstrapTable({
-            classes: "table",
-            columns: [{
-                field: "emp_id",
-                name: "Employee ID",
-                sortable: true
-            }, {
-                field: "emp_name",
-                name: "Employee Name",
-                sortable: true                
-            }, {
-                field: "bin_id",
-                name: "Bin ID",
-                sortable: true                
-            }, {
-                field: "time",
-                name: "Activity Time",
-                sortable: true                
-            }],
-            search: true,
-            pagination: true
+        $(document).ready(() => {
+            let data = {{{json list}}}
+            let $table = $('#emp-table');
+            $table.bootstrapTable({
+                data: data,
+                classes: "table",
+                columns: [{
+                    field: "employee_id",
+                    name: "Employee ID",
+                    sortable: true
+                }, {
+                    field: "first_name",
+                    name: "Firstname",
+                    sortable: true                
+                }, {
+                    field: "last_name",
+                    name: "Lastname",
+                    sortable: true                
+                }],
+                search: true,
+                pagination: true
+            });
         });
 
     </script>
