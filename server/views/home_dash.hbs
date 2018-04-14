@@ -3,10 +3,21 @@
 <head>
     {{!-- CSS Files --}}
     {{> base_css}}
-    <title>Bintot</title>
+    <title>Bintot — {{title}}</title>
 </head>
+
 <body>
-    
+    <div class="wrapper">
+        {{> dash_sidebar}}
+        <div class="main-panel">
+            {{> dash_navbar}}
+            <div class="content">
+                <div class="container">
+
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
     {{!-- JS Files --}}
     {{> base_js}}

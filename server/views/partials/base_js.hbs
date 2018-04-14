@@ -3,3 +3,13 @@
 <script src="/scripts/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/dashboard/js/light-bootstrap-dashboard.js"></script>
 <script src="/scripts/chart.js/dist/Chart.min.js"></script>
+
+{{!-- Set sidebar link --}}
+<script>
+    let navLinks = $('a.nav-link');
+    for (let i = 0; i < navLinks.length; i++) {
+        if ($(navLinks[i]).attr('href') == window.location.pathname) {
+            $(navLinks[i]).parent('.nav-item').addClass('active');
+        }
+    }
+</script>

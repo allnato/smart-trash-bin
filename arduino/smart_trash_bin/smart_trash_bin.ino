@@ -168,7 +168,7 @@ bool readCard() {
 String printHex(byte *buffer, byte bufferSize) {
   String hex = "";
   for (byte i = 0; i < bufferSize; i++) {
-    hex += buffer[i] < 0x10 ? " 0" : " ";
+    hex += buffer[i] < 0x10 ? "0" : "";
     hex += String(buffer[i], HEX);
   }
   return hex;

@@ -36,6 +36,6 @@ app.get('/smart-trash', (req, res) => {
 
 server.listen(port, () => {
     console.log(`Server started on port ${port}`);
-    mqtt.manageMQTTData('mqtt://192.168.1.3', 'smart-trash', realTimeSocket);
+    mqtt.manageMQTTData('mqtt://192.168.1.7', 'smart-trash', realTimeSocket);
     
 });
