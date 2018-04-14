@@ -42,32 +42,48 @@ ORDER BY waste_height DESC
    
 -- bin that has the most trash (in height) per month
 -- --------------------------------------------------------------------------
-  SELECT b.bin_id, b.name AS bin_name, max(sd.waste_height) AS waste_height, 
-         month(sd.data_timestamp) AS month, monthname(sd.data_timestamp) 
-         AS month_name, year(sd.data_timestamp) AS year
-    FROM bin b, sensor_data sd
-   WHERE b.bin_id = sd.bin_id
-     AND year(sd.data_timestamp) = year(CURRENT_TIMESTAMP)
+  SELECT dt.bin_id, bin_name, dt_waste_height AS waste_height, 
+         month, month_name, year
+    FROM (
+		   SELECT b.bin_id, b.name AS bin_name, max(sd.waste_height) AS dt_waste_height, 
+                  month(sd.data_timestamp) AS month, monthname(sd.data_timestamp) 
+				  AS month_name, year(sd.data_timestamp) AS year
+             FROM bin b, sensor_data sd
+			WHERE b.bin_id = sd.bin_id
+	          AND year(sd.data_timestamp) = year(CURRENT_TIMESTAMP)
+              AND sd.waste_height != 0
+		 GROUP BY day(sd.data_timestamp)
+	     ) AS dt
 GROUP BY month
 ORDER BY month;
 
 -- bin that has the top 10 most humid of the month
 -- --------------------------------------------------------------------------
-  SELECT b.bin_id, b.name AS bin_name, sd.humidity
-    FROM bin b, sensor_data sd
-   WHERE b.bin_id = sd.bin_id
-     AND month(sd.data_timestamp) = month(CURRENT_TIMESTAMP)
-ORDER BY sd.humidity DESC
+  SELECT dt.bin_id, dt.name AS bin_name, dt_humidity AS humidity
+    FROM (
+		   SELECT b.bin_id, b.name, max(sd.humidity) AS dt_humidity
+             FROM bin b, sensor_data sd
+            WHERE b.bin_id = sd.bin_id
+              AND month(sd.data_timestamp) = month(CURRENT_TIMESTAMP)
+              AND sd.humidity != 0
+         GROUP BY day(sd.data_timestamp)
+         ) AS dt
+ORDER BY humidity DESC
    LIMIT 10;
 
 -- trash that has the most humid per month
 -- --------------------------------------------------------------------------
-  SELECT b.bin_id, b.name AS bin_name, max(sd.humidity) as humidity, 
-		 month(sd.data_timestamp) AS month, monthname(sd.data_timestamp) 
-         AS month_name, year(sd.data_timestamp) AS year
-    FROM bin b, sensor_data sd
-   WHERE b.bin_id = sd.bin_id
-     AND year(sd.data_timestamp) = year(CURRENT_TIMESTAMP)
+  SELECT dt.bin_id, bin_name, dt_humidity AS humidity, month, month_name, year
+    FROM (
+		   SELECT b.bin_id, b.name AS bin_name, max(sd.humidity) AS dt_humidity, 
+                  month(sd.data_timestamp) AS month, monthname(sd.data_timestamp) 
+				  AS month_name, year(sd.data_timestamp) AS year
+             FROM bin b, sensor_data sd
+			WHERE b.bin_id = sd.bin_id
+	          AND year(sd.data_timestamp) = year(CURRENT_TIMESTAMP)
+              AND sd.humidity != 0
+		 GROUP BY day(sd.data_timestamp)
+	     ) AS dt
 GROUP BY month
 ORDER BY month;
 
@@ -113,7 +129,3 @@ ORDER BY times_cleaned DESC
          ) AS dt
 GROUP BY month
 ORDER BY month;
-
--- problems
--- top ten should be on hourly/daily query first then the actual top ten
--- total waste should be after the day ends or if the janitor picks up the trash
