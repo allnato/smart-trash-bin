@@ -1,43 +1,5 @@
 const conn = require('./db_connect');
 
-function getTotalTrashCurrentWeek(binID) {
-    conn.query(`
-        SELECT sum(waste_height) AS waste_height
-        FROM sensor_data
-        WHERE week(data_timestamp, 2) = week(CURRENT_TIMESTAMP, 2)
-        AND bin_id = ${binID};
-    `, (err, res, field) => {
-        if(err) {
-            console.log(`Error at getTotalTrashCurrentWeek: ${err.message}`);
-            return;
-        }
-
-        console.log(res);
-        return res;
-    })
-}
-
-function getTotalTrashPerWeek(binID) {
-    conn.query(`
-        SELECT sum(waste_height) AS waste_height, 
-        week(data_timestamp, 2) AS week, 
-        monthname(data_timestamp) AS month, year(data_timestamp) AS year
-        FROM sensor_data
-        WHERE bin_id = ${binID}
-        AND month(data_timestamp) = month(CURRENT_TIMESTAMP)
-        GROUP BY week
-        ORDER BY week;
-    `, (err, res, field) => {
-        if(err) {
-            console.log(`Error at getTotalTrashPerWeek: ${err.message}`);
-            return;
-        }
-
-        console.log(res);
-        return res;
-    })
-}
-
 function getAverageTrashCurrentWeek() {
     conn.query(`
         SELECT avg(waste_height) AS waste_height
@@ -76,11 +38,16 @@ function getAverageTrashPerWeek() {
 
 function getTopTenMostTrashCurrentWeek() {
     conn.query(`
-        SELECT b.bin_id, b.name AS bin_name, sd.waste_height
+        SELECT dt.bin_id, dt.name AS bin_name, dt_waste_height AS waste_height
+        FROM (
+        SELECT b.bin_id, b.name, max(sd.waste_height) AS dt_waste_height
         FROM bin b, sensor_data sd
         WHERE b.bin_id = sd.bin_id
         AND week(sd.data_timestamp, 2) = week(CURRENT_TIMESTAMP, 2)
-        ORDER BY sd.waste_height DESC
+        AND sd.waste_height != 0
+        GROUP BY day(sd.data_timestamp)
+        ) AS dt
+        ORDER BY waste_height DESC
         LIMIT 10;
     `, (err, res, field) => {
         if(err) {
@@ -95,12 +62,19 @@ function getTopTenMostTrashCurrentWeek() {
 
 function getMostTrashPerWeek() {
     conn.query(`
-        SELECT b.bin_id, b.name AS bin_name, max(sd.waste_height) AS waste_height, 
-        week(sd.data_timestamp, 2) AS week, 
-        monthname(sd.data_timestamp) AS month, year(sd.data_timestamp) AS year
+        SELECT dt.bin_id, dt.name AS bin_name, dt_waste_height AS waste_height, 
+        week, month, month_name, year
+        FROM (
+        SELECT b.bin_id, b.name, max(sd.waste_height) AS dt_waste_height, 
+        week(sd.data_timestamp, 2) AS week, month(sd.data_timestamp) 
+        AS month, monthname(sd.data_timestamp) AS month_name, 
+        year(sd.data_timestamp) AS year
         FROM bin b, sensor_data sd
         WHERE b.bin_id = sd.bin_id
         AND month(sd.data_timestamp) = month(CURRENT_TIMESTAMP)
+        AND sd.waste_height != 0
+        GROUP BY day(sd.data_timestamp)
+        ) AS dt
         GROUP BY week
         ORDER BY week;
     `, (err, res, field) => {
@@ -116,11 +90,16 @@ function getMostTrashPerWeek() {
 
 function getTopTenMostHumidCurrentWeek() {
     conn.query(`
-        SELECT b.bin_id, b.name AS bin_name, sd.humidity
+        SELECT dt.bin_id, dt.name AS bin_name, dt_humidity AS humidity
+        FROM (
+        SELECT b.bin_id, b.name, max(sd.humidity) AS dt_humidity
         FROM bin b, sensor_data sd
         WHERE b.bin_id = sd.bin_id
         AND week(sd.data_timestamp, 2) = week(CURRENT_TIMESTAMP, 2)
-        ORDER BY sd.humidity DESC
+        AND sd.humidity != 0
+        GROUP BY day(sd.data_timestamp)
+        ) AS dt
+        ORDER BY humidity DESC
         LIMIT 10;
     `, (err, res, field) => {
         if(err) {
@@ -135,12 +114,19 @@ function getTopTenMostHumidCurrentWeek() {
 
 function getMostHumidPerWeek() {
     conn.query(`
-        SELECT b.bin_id, b.name AS bin_name, max(sd.humidity) as humidity, 
-        week(sd.data_timestamp, 2) AS week, 
-        monthname(sd.data_timestamp) AS month, year(sd.data_timestamp) AS year
+        SELECT dt.bin_id, dt.name AS bin_name, dt_humidity AS humidity, 
+        week, month, month_name, year
+        FROM (
+        SELECT b.bin_id, b.name, max(sd.humidity) AS dt_humidity, 
+        week(sd.data_timestamp, 2) AS week, month(sd.data_timestamp) 
+        AS month, monthname(sd.data_timestamp) AS month_name, 
+        year(sd.data_timestamp) AS year
         FROM bin b, sensor_data sd
         WHERE b.bin_id = sd.bin_id
         AND month(sd.data_timestamp) = month(CURRENT_TIMESTAMP)
+        AND sd.humidity != 0
+        GROUP BY day(sd.data_timestamp)
+        ) AS dt
         GROUP BY week
         ORDER BY week;
     `, (err, res, field) => {

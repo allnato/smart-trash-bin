@@ -10,8 +10,6 @@ all.getAllEmployeeData();
 all.getAllEmployeeActivityData();
 all.getAllSensorData();
 
-week.getTotalTrashCurrentWeek(1);
-week.getTotalTrashPerWeek(1);
 week.getAverageTrashCurrentWeek();
 week.getAverageTrashPerWeek();
 week.getTopTenMostTrashCurrentWeek();
