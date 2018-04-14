@@ -40,3 +40,6 @@ ORDER BY ea.activity_timestamp;
     FROM bin b, sensor_data sd
    WHERE b.bin_id = sd.bin_id
 ORDER BY sd.data_timestamp;
+
+-- get num of bins, employees
+-- 
