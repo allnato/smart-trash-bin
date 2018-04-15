@@ -66,7 +66,7 @@ function getTopTenMostTrashCurrentMonth() {
 function getMostTrashPerMonth() {
     conn.query(
     `
-    SELECT dt.bin_id, bin_name, dt_waste_height AS waste_height, 
+    SELECT dt.bin_id, bin_name, max(dt_waste_height) AS waste_height, 
     month, month_name, year
     FROM (
     SELECT b.bin_id, b.name AS bin_name, max(sd.waste_height) AS dt_waste_height, 
@@ -119,7 +119,7 @@ function getTopTenMostHumidCurrentMonth() {
 function getMostHumidPerMonth() {
     conn.query(
     `
-    SELECT dt.bin_id, bin_name, dt_humidity AS humidity, month, month_name, year
+    SELECT dt.bin_id, bin_name, max(dt_humidity) AS humidity, month, month_name, year
     FROM (
     SELECT b.bin_id, b.name AS bin_name, max(sd.humidity) AS dt_humidity, 
     month(sd.data_timestamp) AS month, monthname(sd.data_timestamp) 
@@ -146,13 +146,13 @@ function getMostHumidPerMonth() {
 function getTrashPeakDayCurrentMonth() {
     conn.query(
     `
-    SELECT week, max(ctr_waste_height) AS peak_waste_count
+    SELECT day, max(ctr_waste_height) AS peak_waste_count
     FROM (
-    SELECT week(sd.data_timestamp) AS week, count(sd.waste_height) AS ctr_waste_height
+    SELECT day(sd.data_timestamp) AS day, count(sd.waste_height) AS ctr_waste_height
     FROM sensor_data sd, bin b
     WHERE month(sd.data_timestamp) = month(CURRENT_TIMESTAMP)
     AND sd.waste_height > (b.height * 0.75)
-    GROUP BY day(sd.data_timestamp)
+    GROUP BY day
     ) AS dt;
     `,
     (err,res,field) => {
@@ -168,9 +168,9 @@ function getTrashPeakDayCurrentMonth() {
 function getTrashPeakDayPerMonth() {
     conn.query(
     `
-    SELECT week, max(ctr_waste_height) AS peak_waste_count, month, month_name
+    SELECT day, max(ctr_waste_height) AS peak_waste_count, month, month_name
     FROM (
-    SELECT week(sd.data_timestamp) AS week, count(sd.waste_height) AS ctr_waste_height,
+    SELECT day(sd.data_timestamp) AS day, count(sd.waste_height) AS ctr_waste_height,
     month(sd.data_timestamp) AS month, monthname(sd.data_timestamp) AS month_name
     FROM sensor_data sd, bin b
     WHERE year(sd.data_timestamp) = year(CURRENT_TIMESTAMP)
@@ -198,6 +198,7 @@ function getTopTenMostCleaningEmployeeCurrentMonth() {
     FROM employee e, employee_activity ea
     WHERE month(ea.activity_timestamp) = month(CURRENT_TIMESTAMP)
     AND e.employee_id = ea.employee_id
+    GROUP BY ea.employee_id
     ORDER BY times_cleaned DESC
     LIMIT 10;
     `,
@@ -223,7 +224,7 @@ function getMostCleaningEmployeePerMonth() {
     FROM employee e, employee_activity ea
     WHERE year(ea.activity_timestamp) = year(CURRENT_TIMESTAMP)
     AND e.employee_id = ea.employee_id
-    GROUP BY month(ea.activity_timestamp)
+    GROUP BY ea.employee_id
     ) AS dt
     GROUP BY month
     ORDER BY month;

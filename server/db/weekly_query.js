@@ -185,6 +185,7 @@ function getTopTenMostCleaningEmployeeCurrentWeek() {
         FROM employee e, employee_activity ea
         WHERE week(ea.activity_timestamp) = week(CURRENT_TIMESTAMP)
         AND e.employee_id = ea.employee_id
+        GROUP BY ea.employee_id
         ORDER BY times_cleaned DESC
         LIMIT 10;
     `, (err, res, field) => {
@@ -209,7 +210,7 @@ function getMostCleaningEmployeePerWeek() {
         FROM employee e, employee_activity ea
         WHERE month(ea.activity_timestamp) = month(CURRENT_TIMESTAMP)
         AND e.employee_id = ea.employee_id
-        GROUP BY day(ea.activity_timestamp)
+        GROUP BY ea.employee_id
         ) AS dt
         GROUP BY week
         ORDER BY week;

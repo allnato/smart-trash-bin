@@ -82,11 +82,11 @@ ORDER BY humidity DESC
 GROUP BY year
 ORDER BY year;
 
--- peak month that reached trash threshold of the year
+-- peak day that reached trash threshold of the year
 -- --------------------------------------------------------------------------
-  SELECT month, max(ctr_waste_height) AS peak_waste_count
+  SELECT day, max(ctr_waste_height) AS peak_waste_count
     FROM (
-           SELECT month(sd.data_timestamp) AS month, count(sd.waste_height) AS ctr_waste_height,
+           SELECT day(sd.data_timestamp) AS day, count(sd.waste_height) AS ctr_waste_height,
 				  (year(sd.data_timestamp) * 1000) + day(sd.data_timestamp) AS year_day
              FROM sensor_data sd, bin b
             WHERE year(sd.data_timestamp) = year(CURRENT_TIMESTAMP)
@@ -94,11 +94,11 @@ ORDER BY year;
          GROUP BY year_day
 		 ) AS dt;
 
--- peak month that reached trash threshold per year
+-- peak day that reached trash threshold per year
 -- --------------------------------------------------------------------------
-  SELECT month, max(ctr_waste_height) AS peak_waste_count, year
+  SELECT day, max(ctr_waste_height) AS peak_waste_count, year
     FROM (
-           SELECT month(sd.data_timestamp) AS month, year(sd.data_timestamp) AS year,
+           SELECT day(sd.data_timestamp) AS day, year(sd.data_timestamp) AS year,
                   count(sd.waste_height) AS ctr_waste_height,
 				  (year(sd.data_timestamp) * 1000) + day(sd.data_timestamp) AS year_day
              FROM sensor_data sd, bin b
