@@ -55,7 +55,7 @@ function getTopTenMostTrashCurrentMonth() {
     `,
     (err,res,field) => {
         if (err) {
-            console.log(`Error at :${err.message}`)
+            console.log(`Error at getTopTenMostTrashCurrentMonth:${err.message}`)
             return;
         }
         console.log(res);
