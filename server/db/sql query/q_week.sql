@@ -115,6 +115,7 @@ ORDER BY week;
     FROM employee e, employee_activity ea
    WHERE week(ea.activity_timestamp) = week(CURRENT_TIMESTAMP)
 	 AND e.employee_id = ea.employee_id
+GROUP BY ea.employee_id
 ORDER BY times_cleaned DESC
    LIMIT 10;
    
@@ -129,33 +130,14 @@ ORDER BY times_cleaned DESC
              FROM employee e, employee_activity ea
 			WHERE month(ea.activity_timestamp) = month(CURRENT_TIMESTAMP)
               AND e.employee_id = ea.employee_id
-		 GROUP BY day(ea.activity_timestamp)
+		 GROUP BY ea.employee_id
          ) AS dt
 GROUP BY week
 ORDER BY week;
 
 -- top 10 employees that has the least cleaning performed in the current week
 -- --------------------------------------------------------------------------
-  SELECT e.employee_id, e.first_name, e.last_name, 
-	     count(ea.activity_timestamp) AS times_cleaned
-    FROM employee e, employee_activity ea
-   WHERE week(ea.activity_timestamp) = week(CURRENT_TIMESTAMP)
-	 AND e.employee_id = ea.employee_id
-ORDER BY times_cleaned ASC
-   LIMIT 10;
    
 -- employees that has the least cleaning performed per week
 -- --------------------------------------------------------------------------
-  SELECT dt.employee_id, dt.first_name, dt.last_name, 
-	     min(clean_count) AS times_cleaned, week
-    FROM (
-	       SELECT count(ea.activity_timestamp) AS clean_count, e.employee_id,
-				  e.first_name AS first_name, e.last_name AS last_name,
-                  week(ea.activity_timestamp, 2) AS week
-             FROM employee e, employee_activity ea
-			WHERE month(ea.activity_timestamp) = month(CURRENT_TIMESTAMP)
-              AND e.employee_id = ea.employee_id
-		 GROUP BY day(ea.activity_timestamp)
-         ) AS dt
-GROUP BY week
-ORDER BY week;
+

@@ -42,7 +42,7 @@ ORDER BY waste_height DESC
    
 -- bin that has the most trash (in height) per month
 -- --------------------------------------------------------------------------
-  SELECT dt.bin_id, bin_name, dt_waste_height AS waste_height, 
+  SELECT dt.bin_id, bin_name, max(dt_waste_height) AS waste_height, 
          month, month_name, year
     FROM (
 		   SELECT b.bin_id, b.name AS bin_name, max(sd.waste_height) AS dt_waste_height, 
@@ -73,7 +73,7 @@ ORDER BY humidity DESC
 
 -- trash that has the most humid per month
 -- --------------------------------------------------------------------------
-  SELECT dt.bin_id, bin_name, dt_humidity AS humidity, month, month_name, year
+  SELECT dt.bin_id, bin_name, max(dt_humidity) AS humidity, month, month_name, year
     FROM (
 		   SELECT b.bin_id, b.name AS bin_name, max(sd.humidity) AS dt_humidity, 
                   month(sd.data_timestamp) AS month, monthname(sd.data_timestamp) 
@@ -119,6 +119,7 @@ ORDER BY month;
     FROM employee e, employee_activity ea
    WHERE month(ea.activity_timestamp) = month(CURRENT_TIMESTAMP)
 	 AND e.employee_id = ea.employee_id
+GROUP BY ea.employee_id
 ORDER BY times_cleaned DESC
    LIMIT 10;
    
@@ -133,7 +134,7 @@ ORDER BY times_cleaned DESC
              FROM employee e, employee_activity ea
 			WHERE year(ea.activity_timestamp) = year(CURRENT_TIMESTAMP)
               AND e.employee_id = ea.employee_id
-		 GROUP BY month(ea.activity_timestamp)
+		 GROUP BY ea.employee_id
          ) AS dt
 GROUP BY month
 ORDER BY month;
