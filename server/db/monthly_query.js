@@ -146,9 +146,10 @@ function getMostHumidPerMonth() {
 function getTrashPeakDayCurrentMonth() {
     conn.query(
     `
-    SELECT day, max(ctr_waste_height) AS peak_waste_count
+    SELECT day, max(ctr_waste_height) AS peak_waste_count, day_name
     FROM (
-    SELECT day(sd.data_timestamp) AS day, count(sd.waste_height) AS ctr_waste_height
+    SELECT day(sd.data_timestamp) AS day, count(sd.waste_height) AS ctr_waste_height,
+    dayname(sd.data_timestamp) AS day_name
     FROM sensor_data sd, bin b
     WHERE month(sd.data_timestamp) = month(CURRENT_TIMESTAMP)
     AND sd.waste_height > (b.height * 0.75)
@@ -168,14 +169,15 @@ function getTrashPeakDayCurrentMonth() {
 function getTrashPeakDayPerMonth() {
     conn.query(
     `
-    SELECT day, max(ctr_waste_height) AS peak_waste_count, month, month_name
+    SELECT day, max(ctr_waste_height) AS peak_waste_count, month, month_name, day_name
     FROM (
-    SELECT day(sd.data_timestamp) AS day, count(sd.waste_height) AS ctr_waste_height,
-    month(sd.data_timestamp) AS month, monthname(sd.data_timestamp) AS month_name
+    SELECT dayofyear(sd.data_timestamp) AS day, count(sd.waste_height) AS ctr_waste_height,
+    dayname(sd.data_timestamp) AS day_name, month(sd.data_timestamp) 
+    AS month, monthname(sd.data_timestamp) AS month_name
     FROM sensor_data sd, bin b
     WHERE year(sd.data_timestamp) = year(CURRENT_TIMESTAMP)
     AND sd.waste_height > (b.height * 0.75)
-    GROUP BY day(sd.data_timestamp)
+    GROUP BY dayofyear(sd.data_timestamp)
     ) AS dt
     GROUP BY month
     ORDER BY month;

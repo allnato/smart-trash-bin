@@ -93,7 +93,7 @@ ORDER BY week;
 -- peak day that reached trash threshold of the week
 -- --------------------------------------------------------------------------
   SELECT day(sd.data_timestamp) AS day, 
-		 max(sd.waste_height) AS waste_height, dayname(sd.data_timestamp) AS weekday
+		 max(sd.waste_height) AS waste_height, dayname(sd.data_timestamp) AS day_name
     FROM sensor_data sd, bin b
    WHERE week(sd.data_timestamp, 2) = week(CURRENT_TIMESTAMP, 2)
      AND sd.waste_height > (b.height * 0.75);
@@ -101,7 +101,7 @@ ORDER BY week;
 -- peak day that reached trash threshold per week
 -- --------------------------------------------------------------------------
   SELECT day(sd.data_timestamp) AS day, max(sd.waste_height) AS waste_height,
-         dayname(sd.data_timestamp) AS weekday, week(sd.data_timestamp, 2) AS week
+         dayname(sd.data_timestamp) AS day_name, week(sd.data_timestamp, 2) AS week
     FROM sensor_data sd, bin b
    WHERE month(sd.data_timestamp) = month(CURRENT_TIMESTAMP)
      AND sd.waste_height > (b.height * 0.75)

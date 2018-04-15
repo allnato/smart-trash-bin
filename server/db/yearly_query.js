@@ -46,7 +46,7 @@ function getTopTenMostTrashCurrentYear() {
     WHERE b.bin_id = sd.bin_id
     AND year(sd.data_timestamp) = year(CURRENT_TIMESTAMP)
     AND sd.waste_height != 0
-    GROUP BY day(sd.data_timestamp)
+    GROUP BY dayofyear(sd.data_timestamp)
     ) AS dt
     ORDER BY waste_height DESC
     LIMIT 10;
@@ -67,7 +67,7 @@ function getMostTrashPerYear() {
     SELECT dt.bin_id, bin_name, max(dt_waste_height) AS waste_height, year
     FROM (
     SELECT b.bin_id, b.name AS bin_name, max(sd.waste_height) AS dt_waste_height, 
-    (year(sd.data_timestamp) * 1000) + day(sd.data_timestamp) AS year_day,
+    (year(sd.data_timestamp) * 1000) + dayofyear(sd.data_timestamp) AS year_day,
     year(sd.data_timestamp) AS year
     FROM bin b, sensor_data sd
     WHERE b.bin_id = sd.bin_id
@@ -97,7 +97,7 @@ function getTopTenMostHumidCurrentYear() {
     WHERE b.bin_id = sd.bin_id
     AND year(sd.data_timestamp) = year(CURRENT_TIMESTAMP)
     AND sd.humidity != 0
-    GROUP BY day(sd.data_timestamp)
+    GROUP BY dayofyear(sd.data_timestamp)
     ) AS dt
     ORDER BY humidity DESC
     LIMIT 10;
@@ -118,7 +118,7 @@ function getMostHumidPerYear() {
     SELECT dt.bin_id, bin_name, max(dt_humidity) AS humidity, year
     FROM (
     SELECT b.bin_id, b.name AS bin_name, max(sd.humidity) AS dt_humidity, 
-    (year(sd.data_timestamp) * 1000) + day(sd.data_timestamp) AS year_day,
+    (year(sd.data_timestamp) * 1000) + dayofyear(sd.data_timestamp) AS year_day,
     year(sd.data_timestamp) AS year
     FROM bin b, sensor_data sd
     WHERE b.bin_id = sd.bin_id
@@ -141,10 +141,11 @@ function getMostHumidPerYear() {
 function getTrashPeakDayCurrentYear() {
     conn.query(
     `
-    SELECT day, max(ctr_waste_height) AS peak_waste_count
+    SELECT day, max(ctr_waste_height) AS peak_waste_count, day_name
     FROM (
-    SELECT day(sd.data_timestamp) AS day, count(sd.waste_height) AS ctr_waste_height,
-    (year(sd.data_timestamp) * 1000) + day(sd.data_timestamp) AS year_day
+    SELECT dayofyear(sd.data_timestamp) AS day, count(sd.waste_height) AS ctr_waste_height,
+    (year(sd.data_timestamp) * 1000) + dayofyear(sd.data_timestamp) AS year_day,
+    dayname(sd.data_timestamp) AS day_name
     FROM sensor_data sd, bin b
     WHERE year(sd.data_timestamp) = year(CURRENT_TIMESTAMP)
     AND sd.waste_height > (b.height * 0.75)
@@ -164,11 +165,12 @@ function getTrashPeakDayCurrentYear() {
 function getTrashPeakDayPerYear() {
     conn.query(
     `
-    SELECT day, max(ctr_waste_height) AS peak_waste_count, year
+    SELECT day, max(ctr_waste_height) AS peak_waste_count, year, day_name
     FROM (
-    SELECT day(sd.data_timestamp) AS day, year(sd.data_timestamp) AS year,
+    SELECT dayofyear(sd.data_timestamp) AS day, year(sd.data_timestamp) AS year,
     count(sd.waste_height) AS ctr_waste_height,
-    (year(sd.data_timestamp) * 1000) + day(sd.data_timestamp) AS year_day
+    dayname(sd.data_timestamp) AS day_name,
+    (year(sd.data_timestamp) * 1000) + dayofyear(sd.data_timestamp) AS year_day
     FROM sensor_data sd, bin b
     WHERE sd.waste_height > (b.height * 0.75)
     GROUP BY year_day
