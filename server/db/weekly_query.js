@@ -225,8 +225,8 @@ function getMostCleaningEmployeePerWeek() {
 }
 
 module.exports = {
-    getTotalTrashCurrentWeek,
-    getTotalTrashPerWeek,
+    getAverageTrashCurrentWeek,
+    getAverageTrashPerWeek,
     getAverageTrashCurrentWeek,
     getAverageTrashPerWeek,
     getTopTenMostTrashCurrentWeek,
