@@ -21,24 +21,18 @@ week.getTrashPeakDayPerWeek();
 week.getTopTenMostCleaningEmployeeCurrentWeek();
 week.getMostCleaningEmployeePerWeek();
 
-month.getAverageTrashCurrentMonth();
-month.getAverageTrashPerMonth();
-month.getTopTenMostTrashCurrentMonth();
-month.getMostTrashPerMonth();
-month.getTopTenMostHumidCurrentMonth();
-month.getMostHumidPerMonth();
-month.getTrashPeakDayCurrentMonth();
-month.getTrashPeakDayPerMonth();
-month.getTopTenMostCleaningEmployeeCurrentMonth();
-month.getMostCleaningEmployeePerMonth();
 
-year.getAverageTrashCurrentYear();
-year.getAverageTrashPerYear();
-year.getTopTenMostTrashCurrentYear();
-year.getMostTrashPerYear();
-year.getTopTenMostHumidCurrentYear();
-year.getMostHumidPerYear();
-year.getTrashPeakDayCurrentYear();
-year.getTrashPeakDayPerYear();
-year.getTopTenMostCleaningEmployeeCurrentYear();
-year.getMostCleaningEmployeePerYear();
+Promise.all([
+    month.getAverageTrashPerMonth(),
+    month.getAverageTrashCurrentMonth(),
+    month.getTopTenMostTrashCurrentMonth(),
+    month.getMostTrashPerMonth(),
+    month.getTopTenMostHumidCurrentMonth(),
+    month.getMostHumidPerMonth(),
+    month.getTrashPeakDayCurrentMonth(),
+    month.getTrashPeakDayPerMonth()
+]).then(list => {
+    console.log(list);
+}).catch(err => {
+    console.log('Error');
+});

@@ -28,30 +28,11 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th>Employee ID</th>
-                                        <th>Employee Name</th>
                                         <th>Bin ID</th>
                                         <th>Time Activity</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>11443529</td>
-                                        <td>Allendale</td>
-                                        <td>012</td>
-                                        <td>11:32:42</td>
-                                    </tr>
-                                    <tr>
-                                        <td>11243582</td>
-                                        <td>Othello</td>
-                                        <td>014</td>
-                                        <td>02:45:12</td>
-                                    </tr>
-                                    <tr>
-                                        <td>11568244</td>
-                                        <td>Hamlet</td>
-                                        <td>063</td>
-                                        <td>16:21:44</td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -63,8 +44,11 @@
 </body>
     {{!-- JS Files --}}
     {{> base_js}}
-    {{> socket_client}}
     <script src="/scripts/bootstrap-table/dist/bootstrap-table.min.js"></script>
+    <script src="/scripts/socket.io-client/dist/socket.io.js"></script>
+    <script src="/scripts/moment/moment.js"></script>
+    
+        
     <script>
         let $table = $('#emp-table');
         $table.bootstrapTable({
@@ -73,10 +57,6 @@
                 field: "emp_id",
                 name: "Employee ID",
                 sortable: true
-            }, {
-                field: "emp_name",
-                name: "Employee Name",
-                sortable: true                
             }, {
                 field: "bin_id",
                 name: "Bin ID",
@@ -88,6 +68,21 @@
             }],
             search: true,
             pagination: true
+        });
+
+        let socket = io('/real-time-data');
+        
+        socket.on('real-time-data', data => {
+            if (data.dataType == 'activity') {
+                let newActivity = {
+                    emp_id: data.employee_id,
+                    bin_id: data.trashID,
+                    time: moment().format('MM-DD-YYYY HH:MM:SS')
+                }
+
+                $table.bootstrapTable('insertRow', {index: 0, row: newActivity})
+            }
+            
         });
 
     </script>

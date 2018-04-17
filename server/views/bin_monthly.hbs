@@ -3,6 +3,8 @@
 <head>
     {{!-- CSS Files --}}
     {{> base_css}}
+    <link rel="stylesheet" href="/scripts/bootstrap-table/dist/bootstrap-table.min.css">
+    
     <title>Bintot — {{title}}</title>
 </head>
 
@@ -13,7 +15,119 @@
             {{> dash_navbar}}
             <div class="content">
                 <div class="container">
-
+                    <div class="row">
+                        {{!-- Average Trash Current Month --}}
+                        <div class="col-md-4">
+                            <div class="card text-center border-info">
+                                <div class="card-header">
+                                    <h4 class="card-title">Average Trash Accumulation</h4>
+                                    <p class="card-category">April Monthly Data</p>
+                                    <hr>
+                                </div>
+                                <div class="card-body">
+                                    <h2 class="text-center mt-0">
+                                        <strong id="averageTrashMonth" class="text-info"></strong>
+                                    </h2>
+                                </div>
+                                <div class="card-footer">
+                                    <hr>
+                                    <div class="stats">
+                                        As of <span class="currentDate"></span>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        {{!-- Peak Week --}}
+                        <div class="col-md-4">
+                            <div class="card text-center border-warning">
+                                <div class="card-header">
+                                    <h4 class="card-title">Peak Week of the Month</h4>
+                                    <p class="card-category">Max peak waste count</p>
+                                    <hr>
+                                </div>
+                                <div class="card-body">
+                                    <h2 class="text-center mt-0">
+                                        <strong class="text-warning">Week <span id="peakWeek"></span></strong>
+                                    </h2>
+                                </div>
+                                <div class="card-footer">
+                                    <hr>
+                                    <div class="stats weekRange">
+                                        
+                                    </div> 
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="col-md-4">
+                            <div class="card text-center border-warning">
+                                <div class="card-header">
+                                    <h4 class="card-title">Peak Waste Count</h4>
+                                    <p class="card-category">Max peak waste count</p>
+                                    <hr>
+                                </div>
+                                <div class="card-body">
+                                    <h2 class="text-center mt-0">
+                                        <strong id="peakWasteCount" class="text-warning"></strong>
+                                    </h2>
+                                </div>
+                                <div class="card-footer">
+                                    <hr>
+                                    <div class="stats weekRange">
+                                        
+                                    </div> 
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 offset-md-3">
+                            <div class="card border-secondary">
+                                <div class="card-header">
+                                    Average Trash Accumulated per Month
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="avgTrashPerMonth"></canvas>                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row border rounded border-success">
+                        <div class="col-md-6 bg-white  ">
+                            <div class="table-responsive">
+                                <h5 class="mt-3">Bin- Most Humid per Month</h5>
+                                <table id="humid-monthly" class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Bin ID</th>
+                                            <th>Bin Name</th>
+                                            <th>Humidity</th>
+                                            <th>Month</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6 bg-white  ">
+                            <div class="table-responsive">
+                                <h5 class="mt-3">Bin- Most Trash per Month</h5>
+                                <table id="bin-table-month" class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Bin ID</th>
+                                            <th>Bin Name</th>
+                                            <th>Waste Height</th>
+                                            <th>Month</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -21,4 +135,108 @@
 </body>
     {{!-- JS Files --}}
     {{> base_js}}
+    <script src="/scripts/bootstrap-table/dist/bootstrap-table.min.js"></script>    
+    <script src="/scripts/moment/moment.js"></script>
+    <script>
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF'.split('');
+            var color = '#';
+            for (var i = 0; i < 6; i++ ) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+    </script>
+    <script>
+        let data = {{{json data}}};
+        $('#averageTrashMonth').text(data.averageTrashCurrent[0].waste_height.toFixed(2) + 'cm');
+        let peakWeak = data.trashPeakDayCurrent[0].week;
+        $('#peakWeek').text(peakWeak);
+        $('#peakWasteCount').text(data.trashPeakDayCurrent[0].peak_waste_count);
+        $('.weekRange').text(moment(peakWeak, 'ww').day(1).format('MMM DD') + ' - ' + moment(peakWeak, 'ww').day(7).format('MMM DD'));        
+        $('.currentDate').text(moment().format('MMM DD, YYYY'));
+
+        let labels = [];
+        let avgTrashData = [];
+        let labelBg = [];
+        for (let i = 0; i < data.averageTrashMonthly.length; i++) {
+            labels.push(data.averageTrashMonthly[i].month_name);
+            avgTrashData.push(data.averageTrashMonthly[i].waste_height.toFixed(2));            
+            labelBg.push(getRandomColor());
+        }
+
+        let avgTrashPerMonthChart = new Chart($('#avgTrashPerMonth') ,{
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets:[{
+                    label: 'Average Trash Height',
+                    data: avgTrashData,
+                    backgroundColor: labelBg,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                legend :{display: false},
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+
+        let $bin_table_month = $('#bin-table-month');
+            $bin_table_month.bootstrapTable({
+                data: data.mostTrashMonthly,
+                classes: "table",
+                columns: [{
+                    field: "bin_id",
+                    name: "Bin ID",
+                    sortable: true
+                }, {
+                    field: "bin_name",
+                    name: "Bin Name",
+                    sortable: true                
+                }, {
+                    field: "waste_height",
+                    name: "Waste Height",
+                    sortable: true                
+                }, {
+                    field: "month_name",
+                    name: "Month",
+                    sortable: true                
+                }],
+                search: true,
+                pagination: true
+            });
+
+            let $humid_monthly = $('#humid-monthly');
+            $humid_monthly.bootstrapTable({
+                data: data.mostHumidMonthly,
+                classes: "table",
+                columns: [{
+                    field: "bin_id",
+                    name: "Bin ID",
+                    sortable: true
+                }, {
+                    field: "bin_name",
+                    name: "Bin Name",
+                    sortable: true                
+                }, {
+                    field: "humidity",
+                    name: "Humidity",
+                    sortable: true                
+                }, {
+                    field: "month_name",
+                    name: "Month",
+                    sortable: true                
+                }],
+                search: true,
+                pagination: true
+            });
+
+    </script>
 </html>

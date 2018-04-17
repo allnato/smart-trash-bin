@@ -26,6 +26,7 @@
     "Font-Awesome": "^5.0.9",
     "jquery": "^3.3.1",
     "socket.io-client": "^2.1.0",
-    "bootstrap-table": "^1.12.1"
+    "bootstrap-table": "^1.12.1",
+    "moment": "^2.22.0"
   }
 }

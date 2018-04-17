@@ -25,4 +25,4 @@ async function publishSerialData(serialport, brokerAddr, topic) {
     }
 };
 
-publishSerialData('COM8', 'mqtt://192.168.1.7', 'smart-trash');
+publishSerialData('COM8', 'mqtt://192.168.1.3', 'smart-trash');

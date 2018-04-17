@@ -2,6 +2,7 @@ const express   = require('express');
 const router     = express.Router();
 
 const q_all     = require('./../db/all_query');
+const q_month   = require('./../db/monthly_query');
 
 // Real-time Employee Activity
 router.get('/real-time', (req, res) => {
@@ -34,9 +35,23 @@ router.get('/weekly', (req, res) => {
 });
 
 router.get('/monthly', (req, res) => {
-    res.render('emp_monthly.hbs', {
-        title: "Employee Monthly Data",
-        uri: "/emp/monthly"
+    Promise.all([
+        q_month.getTopTenMostCleaningEmployeeCurrentMonth(),
+        q_month.getMostCleaningEmployeePerMonth()
+    ])
+    .then(data => {
+        res.render('emp_monthly.hbs', {
+            title: "Employee Monthly Data",
+            uri: "/emp/monthly",
+            data: {
+                topTenEmployee: data[0],
+                bestEmployeePerMonth: data[1]
+            }
+        });
+    })
+    .catch(err => {
+        res.status(500);
+        res.send(`Internal Server Error: ${err}`);
     });
 });
 

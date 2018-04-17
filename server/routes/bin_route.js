@@ -2,6 +2,7 @@ const express   = require('express');
 const router    = express.Router();
 
 const q_all     = require('./../db/all_query');
+const q_month   = require('./../db/monthly_query');
 
 router.get('/list', (req, res) => {
     q_all.getAllBinData()
@@ -36,9 +37,35 @@ router.get('/weekly', (req, res) => {
 
 // Bin Monthly
 router.get('/monthly', (req, res) => {
-    res.render('bin_monthly.hbs', {
-        title: "Smart Bin Monthly Data",
-        uri: "/bin/monthly"
+    Promise.all([
+        q_month.getAverageTrashCurrentMonth(),
+        q_month.getAverageTrashPerMonth(),
+        q_month.getTopTenMostTrashCurrentMonth(),
+        q_month.getMostTrashPerMonth(),
+        q_month.getTopTenMostHumidCurrentMonth(),
+        q_month.getMostHumidPerMonth(),
+        q_month.getTrashPeakDayCurrentMonth(),
+        q_month.getTrashPeakDayPerMonth()
+    ])
+    .then(data => {
+        res.render('bin_monthly.hbs', {
+            title: "Smart Bin Monthly Data",
+            uri: "/bin/monthly",
+            data: {
+                averageTrashCurrent: data[0],
+                averageTrashMonthly: data[1],
+                topTenMostTrashCurrent: data[2],
+                mostTrashMonthly: data[3],
+                topTenMostHumidCurrent: data[4],
+                mostHumidMonthly: data[5],
+                trashPeakDayCurrent: data[6],
+                trashPeakDayMonthly: data[7]
+            }
+        });
+    })
+    .catch(err => {
+        res.status(500);
+        res.send(`Internal Server Error: ${err}`);
     });
 });
 
