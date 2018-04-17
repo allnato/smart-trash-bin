@@ -23,7 +23,7 @@ exports.broadcastData = (socket, msg) => {
     try {
         let jsonData = JSON.parse(msg);
         socket.clients((err, clients) => {
-            if (clients.length > 0 && jsonData.dataType == 'sensor') {
+            if (clients.length > 0) {
                 socket.emit('real-time-data', jsonData);
             }
         });

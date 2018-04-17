@@ -1,13 +1,67 @@
 <script src="/scripts/socket.io-client/dist/socket.io.js"></script>
 <script>
-    var socket = io('/real-time-data');
+    let socket = io('/real-time-data');
+    
     socket.on('real-time-data', data => {
-        wasteChart.data.datasets[0].data = [data.wastePercent];
-        wasteChart.update();
-        $('.wastePercentText').text(data.wastePercent.toFixed(2) + "%");
-        humidChart.data.datasets[0].data = [data.humidity, (100 - data.humidity)];
-        humidChart.update();
-        $('.humidPercentText').text(data.humidity.toFixed(2) + "%");
+        if (data.dataType == "sensor") {
+            updateSensorData(data);
+        }
         
     });
+
+    const wasteColor = {
+        greenBg: 'rgba(67,160,71 ,.2)',
+        greenBorder: 'rgba(56,142,60 ,1)',
+        limeBg: 'rgba(192,202,51 ,.2)', 
+        limeBoder: 'rgba(175,180,43 ,1)',
+        yellowBg: 'rgba(253,216,53 ,.2)',
+        yellowBorder: 'rgba(251,192,45 ,1)',
+        amberBg: 'rgba(255,179,0 ,.2)',
+        amberBorder: 'rgba(255,160,0 ,1)',
+        orangeBg: 'rgba(244,81,30 ,.2)',
+        orangeBorder: 'rgba(230,74,25 ,1)'
+    }
+
+    function updateSensorData(data) {
+        // Update Waste data
+        $('.wastePercentText').text(data.wastePercent.toFixed(2) + "%");
+        wasteChart.data.datasets[0].data = [data.wastePercent];
+        let backgroundColor, borderColor;
+        if (data.wastePercent < 20) {
+            backgroundColor = wasteColor.greenBg;
+            borderColor = wasteColor.greenBg;
+        } else if (data.wastePercent < 40) {
+            backgroundColor = wasteColor.limeBg;
+            borderColor = wasteColor.limeBoder;
+        } else if (data.wastePercent < 60) {
+            backgroundColor = wasteColor.yellowBg;
+            borderColor = wasteColor.yellowBorder;
+        } else if (data.wastePercent < 80) {
+            backgroundColor = wasteColor.amberBg;
+            borderColor = wasteColor.amberBorder;
+        } else {
+            backgroundColor = wasteColor.orangeBg;
+            borderColor = wasteColor.orangeBorder;
+        }
+        wasteChart.data.datasets[0].backgroundColor = [backgroundColor];
+        wasteChart.data.datasets[0].borderColor = [borderColor];      
+        wasteChart.update();
+        // Update humid data
+        $('.humidPercentText').text(data.humidity.toFixed(2) + "%");
+        humidChart.data.datasets[0].data = [data.humidity, (100 - data.humidity)];
+        humidChart.update();
+        // Update temperature data
+        $('.temperature').text(data.temperature.toFixed(2) + "C");
+
+        // Update tilt data  
+        if (data.tiltPos == 1) {
+            $('.tiltPos').text("Closed");
+            $('.tiltPos').attr('class', 'tiltPos badge badge-danger');    
+        } else  if (data.tiltPos == 2){
+            $('.tiltPos').text("Open");
+            $('.tiltPos').attr('class', 'tiltPos badge badge-success');                
+        }
+    }
+
+
 </script>

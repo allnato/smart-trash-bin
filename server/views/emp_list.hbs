@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{!-- CSS Files --}}
+    {{> base_css}}
+    <link rel="stylesheet" href="/scripts/bootstrap-table/dist/bootstrap-table.min.css">
+    <title>STB — Real-Time Data</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        {{> dash_sidebar}}
+        <div class="main-panel">
+            {{> dash_navbar}}
+            <div class="content">
+                <div class="container">
+                    <div class="jumbotron text-center bg-primary">
+                        <h2 class="text-center text-white display-5 mb-0">
+                            <i class="far fa-id-badge"></i> <strong>{{title}}</strong>
+                        </h2>
+                    </div>
+
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table id="emp-table" class="table">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Employee ID</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+    {{!-- JS Files --}}
+    {{> base_js}}
+    <script src="/scripts/bootstrap-table/dist/bootstrap-table.min.js"></script>
+    <script>
+        $(document).ready(() => {
+            let data = {{{json list}}}
+            let $table = $('#emp-table');
+            $table.bootstrapTable({
+                data: data,
+                classes: "table",
+                columns: [{
+                    field: "employee_id",
+                    name: "Employee ID",
+                    sortable: true
+                }, {
+                    field: "first_name",
+                    name: "Firstname",
+                    sortable: true                
+                }, {
+                    field: "last_name",
+                    name: "Lastname",
+                    sortable: true                
+                }],
+                search: true,
+                pagination: true
+            });
+        });
+
+    </script>
+
+</html>

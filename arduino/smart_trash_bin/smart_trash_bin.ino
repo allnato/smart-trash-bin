@@ -29,7 +29,7 @@ SimpleTimer rfidTimer;
 #define DHT_TYPE      DHT11
 
 // Initialize Sensors
-NewPing sonar(TRIG_PIN, ECHO_PIN, DIST_MAX);
+NewPing sonar(TRIG_PIN, ECHO_PIN);
 MFRC522 rfid(SDA_PIN, RST_PIN);
 MFRC522::MIFARE_Key key;
 DHT dht(DHT_PIN, DHT_TYPE);
@@ -89,8 +89,8 @@ void sendJSONSensorData() {
   root["temperature"] = t;
   root["humidity"] = h;
   root["tiltPos"] = tiltPos;
-//  root.printTo(Serial);
-//  Serial.println();
+  root.printTo(Serial);
+  Serial.println();
   root.printTo(XBee);
   XBee.println();
 }
@@ -108,7 +108,9 @@ void sendJSONRfidData() {
     root["trashID"] = TRASH_ID;
     root["employee_id"] = printHex(nuidPICC, rfid.uid.size);;
     root.printTo(Serial);
-    Serial.println();   
+    Serial.println();
+    root.printTo(XBee);
+    XBee.println();   
   }
 }
 
@@ -168,7 +170,7 @@ bool readCard() {
 String printHex(byte *buffer, byte bufferSize) {
   String hex = "";
   for (byte i = 0; i < bufferSize; i++) {
-    hex += buffer[i] < 0x10 ? " 0" : " ";
+    hex += buffer[i] < 0x10 ? "0" : "";
     hex += String(buffer[i], HEX);
   }
   return hex;

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{!-- CSS Files --}}
+    {{> base_css}}
+    <link rel="stylesheet" href="/scripts/bootstrap-table/dist/bootstrap-table.min.css">    
+    <title>Bintot — {{title}}</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        {{> dash_sidebar}}
+        <div class="main-panel">
+            {{> dash_navbar}}
+            <div class="content">
+                <div class="container">
+                    <div class="jumbotron text-center bg-primary">
+                        <h2 class="text-center text-white display-5 mb-0">
+                            <i class="far fa-list-alt"></i> <strong>{{title}}</strong>
+                        </h2>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="emp-table" class="table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Trash Bin ID</th>
+                                    <th>Trash Bin Name</th>
+                                    <th>Bin Height (cm)</th>
+                                    <th>Address</th>
+                                    <th>City</th>
+                                    <th>State</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+    {{!-- JS Files --}}
+    {{> base_js}}
+    <script src="/scripts/bootstrap-table/dist/bootstrap-table.min.js"></script>
+    <script>
+        let data = {{{json list}}}
+        let $table = $('#emp-table');
+        $(document).ready(() => {
+            $table.bootstrapTable({
+                data: data,
+                classes: "table",
+                columns: [{
+                    field: "bin_id",
+                    name: "Bin ID",
+                    sortable: true
+                }, {
+                    field: "bin_name",
+                    name: "Bin Name",
+                    sortable: true                
+                }, {
+                    field: "bin_height",
+                    name: "Bin Height",
+                    sortable: true                
+                }, {
+                    field: "address",
+                    name: "Adresss",
+                    sortable: true                
+                }, {
+                    field: "city",
+                    name: "City",
+                    sortable: true                
+                }, {
+                    field: "state",
+                    name: "State",
+                    sortable: true                
+                }],
+                search: true,
+                pagination: true
+            });
+
+
+        });
+
+    </script>    
+</html>
