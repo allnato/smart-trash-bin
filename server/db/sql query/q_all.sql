@@ -43,3 +43,10 @@ ORDER BY sd.data_timestamp;
 
 -- get num of bins, employees
 -- 
+
+
+SELECT e.employee_id, b.bin_id, ea.activity_timestamp
+    FROM bin b, employee e, employee_activity ea
+   WHERE b.bin_id = ea.bin_id 
+     AND ea.employee_id = e.employee_id
+ORDER BY ea.activity_timestamp;

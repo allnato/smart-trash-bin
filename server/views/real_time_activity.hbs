@@ -50,11 +50,13 @@
     
         
     <script>
+        let data = {{{json list}}};
         let $table = $('#emp-table');
         $table.bootstrapTable({
+            data: data,
             classes: "table",
             columns: [{
-                field: "emp_id",
+                field: "employee_id",
                 name: "Employee ID",
                 sortable: true
             }, {
@@ -62,9 +64,13 @@
                 name: "Bin ID",
                 sortable: true                
             }, {
-                field: "time",
+                field: "activity_timestamp",
                 name: "Activity Time",
-                sortable: true                
+                sortable: true,
+                formatter: function(val, row, index, field) {
+
+                    return moment(val).format('MM-DD-YYYY HH:MM:SS');
+                }           
             }],
             search: true,
             pagination: true

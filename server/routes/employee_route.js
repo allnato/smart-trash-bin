@@ -6,10 +6,18 @@ const q_month   = require('./../db/monthly_query');
 
 // Real-time Employee Activity
 router.get('/real-time', (req, res) => {
-    res.render('real_time_activity.hbs', {
-        title: "Employee Real-Time Activity Tracker",
-        uri: "/emp/real-time"
-    });
+    q_all.getEmployeeActivityList()
+        .then(data => {
+            res.render('real_time_activity.hbs', {
+                title: "Employee Real-Time Activity Tracker",
+                uri: "/emp/real-time",
+                list: data
+            });
+        })
+        .catch(err => {
+            res.status(500);
+            res.send('Internal Server Error');
+        });
 });
 
 router.get('/list', (req, res) => {

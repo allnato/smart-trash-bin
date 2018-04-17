@@ -73,9 +73,29 @@ function getAllSensorData() {
     });
 }
 
+function getEmployeeActivityList() {
+    return new Promise((resolve, reject) => {
+        conn.query(`
+            SELECT e.employee_id, b.bin_id, ea.activity_timestamp
+            FROM bin b, employee e, employee_activity ea
+            WHERE b.bin_id = ea.bin_id 
+            AND ea.employee_id = e.employee_id
+            ORDER BY ea.activity_timestamp;
+
+        `, (err, res, field) => {
+            if(err) {
+                console.log(`Error at getEmployeeActivityList: ${err.message}`);
+                reject();
+            }
+            resolve(res);
+        })
+    })
+}
+
 module.exports = {
     getAllBinData,
     getAllEmployeeData,
     getAllEmployeeActivityData,
-    getAllSensorData
+    getAllSensorData,
+    getEmployeeActivityList
 }
