@@ -58,7 +58,7 @@ sudo apt-get install wine
 
 
 
-##Sensor Modules
+### Sensor Modules
 
 |Sensors| Library Used |
 |--|--|
